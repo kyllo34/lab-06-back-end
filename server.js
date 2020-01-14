@@ -10,22 +10,21 @@ app.use(cors());
 
 app.get('/location', (request, response) => {
   let city = request.query.city;
-  const geoData = require('./data/geo.json')
+  const geoData = require('./data/geo.json');
+  let geoDataResults = geoData[0];
 
-
-  let location = {
-    search_query: city,
-    formatted_query: geoData[0].display_name,
-    latitude: geoData[0].lat,
-    longitude: geoData[0].lon
-  }
+  let location = new Location(city, geoDataResults);
 
   response.status(200).send(location);
 });
 
-// app.get('/', (request, response) => {
-//   response.send('hello from local host 3000');
-// })
+function Location(city, locationData) {
+  this.search_query = city;
+  this.formatted_query = locationData.display_name;
+  this.latitude = locationData.lat;
+  this.longitude = locationData.lon
+}
+
 
 app.listen(PORT, () => {
   console.log(`listen on ${PORT}`)
