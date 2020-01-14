@@ -1,7 +1,7 @@
 {
   "name": "lab5",
   "version": "1.0.0",
-  "description": "",
+  "description": "hello",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,5 +14,14 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "live-server": "^1.2.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyllo34/lab-06-back-end.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kyllo34/lab-06-back-end/issues"
+  },
+  "homepage": "https://github.com/kyllo34/lab-06-back-end#readme"
 }
