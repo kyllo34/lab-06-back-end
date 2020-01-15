@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(cors());
 let locations = {};
+let forecasts = {};
 
 // Route Definitions
 app.get('/location', locationHandler);
@@ -31,9 +32,7 @@ function locationHandler(request, response) {
     superagent.get(url)
       .then(data => {
         let geoDataResults = data.body[0];
-
         let location = new Location(city, geoDataResults);
-
         response.status(200).send(location);
       })
       .catch(() => {
@@ -43,14 +42,27 @@ function locationHandler(request, response) {
 }
 
 function weatherHandler(request, response) {
-  try {
-    let city = request.query.city;
-    const geoWeather = require('./data/darksky.json');
-    response.status(200).send(geoWeather.daily.data.map(day => new DailySummary(day)));
+  let key = process.env.DARKSKY_API_KEY;
+  let latitude = request.query.latitude;
+  let longitude = request.query.longitude;
+  const url = `https://api.darksky.net/forecast/${key}/${latitude},${longitude}`
+  if (forecasts[url]) {
+    response.send(forecasts[url])
+  } else {
+    superagent.get(url)
+      .then(dataSet => {
+        response.status(200).send(dataSet.body.daily.data.map(day => new DailySummary(day)));
+      })
+      .catch(() => errorHandler('Something went wrong', response))
   }
-  catch (error) {
-    errorHandler('Something went wrong', response);
-  }
+
+
+  // try {
+  //   response.status(200).send(geoWeather.daily.data.map(day => new DailySummary(day)));
+  // }
+  // catch (error) {
+  //   errorHandler('Something went wrong', response);
+  // }
 }
 
 // Constructors
