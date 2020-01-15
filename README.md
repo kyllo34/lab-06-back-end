@@ -51,3 +51,13 @@ Start time: 12:56PM
 Finish time: 2:00PM  
 
 Actual time needed to complete: 90mins  
+
+### Feature 3: Data Formatting
+
+Estimate of time needed to complete: 45mins  
+
+Start time: 12:56PM  
+
+Finish time: 2:00PM  
+
+Actual time needed to complete: 90mins  
