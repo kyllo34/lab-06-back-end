@@ -1,7 +1,7 @@
 # lab-6  
 
 **Author**: Andrew Kyllo  
-**Version**: 1.1.2 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 1.1.1 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
 A stand-alone back end app which will interact with a static front end.
@@ -18,7 +18,7 @@ superagent: v5.2.1
 
 ## Change Log
 
-
+**1/15/2020 11:41** Refactored location handler function to utilize API queries 
 
 ## Credits and Collaborations
 Cait Rowland      https://github.com/caitleigh  
@@ -72,6 +72,6 @@ Estimate of time needed to complete: 60mins
 
 Start time: 10:21PM  
 
-Finish time: 10:15PM  
+Finish time: 11:40PM  
 
-Actual time needed to complete: 30mins 
+Actual time needed to complete: 80mins 
