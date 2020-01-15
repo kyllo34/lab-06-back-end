@@ -22,14 +22,22 @@ Cait Rowland https://github.com/caitleigh
 Cidy Weiss https://github.com/cindyweiss
 
 
-A stand-alone back end app with a static front end.
-
-Number and name of feature: Feature 1: Location Query
+Feature 1: Location Query
 
 Estimate of time needed to complete: 120mins
 
 Start time: 12:00PM
 
-Finish time: _____
+Finish time: 13:00PM
 
-Actual time needed to complete: _____
+Actual time needed to complete: 60mins
+
+Feature 2: Weather Query
+
+Estimate of time needed to complete: 60mins
+
+Start time: 12:56PM
+
+Finish time: 2:00PM
+
+Actual time needed to complete: 60mins
