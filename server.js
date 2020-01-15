@@ -33,23 +33,17 @@ function Location(city, locationData) {
 }
 
 
-// Error Handlers
-app.use('*', routeErrorHandler);
-function errorHandler(string, response) {
-  response.status(500).send(string)
-}
-function routeErrorHandler(request, response) {
-  response.status(404).send('Route doesn\'t exist');
-}
 
 const dailySummaries = [];
 app.get('/weather', (request, response) => {
-  let city = request.query.city;
-  const geoWeather = require('./data/darksky.json');
-  geoWeather.daily.data.forEach(day => {
-    dailySummaries.push(new DailySummary(day));
-  });
-  response.status(200).send(dailySummaries);
+  try {
+    let city = request.query.city;
+    const geoWeather = require('./data/darksky.json');
+    response.status(200).send(geoWeather.daily.data.map(day => new DailySummary(day)));
+  }
+  catch (error) {
+    errorHandler('Something went wrong', response);
+  }
 })
 
 function DailySummary(day) {
@@ -58,10 +52,17 @@ function DailySummary(day) {
   dailySummaries.push(this);
 }
 
-
+function errorHandler(string, response) {
+  response.status(500).send(string);
+}
 
 app.listen(PORT, () => {
   console.log(`listen on ${PORT}`)
 });
 
 app.use(cors());
+
+
+// Error Handlers
+app.use('*', (request, response ) => response.status(404).send('Page not found!'));
+
