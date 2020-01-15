@@ -1,7 +1,7 @@
 # lab-6  
 
 **Author**: Andrew Kyllo  
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 1.1.2 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
 A stand-alone back end app which will interact with a static front end.
@@ -10,16 +10,20 @@ A stand-alone back end app which will interact with a static front end.
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 
 ## Architecture
-<!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+cors: v2.8.5
+dotenv: v8.2.0
+express: v4.17.1
+live-server: v1.2.1
+superagent: v5.2.1
 
 ## Change Log
-<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples: -->
 
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource.
+
 
 ## Credits and Collaborations
-Cait Rowland https://github.com/caitleigh  
-Cidy Weiss https://github.com/cindyweiss  
+Cait Rowland      https://github.com/caitleigh  
+Cidy Weiss        https://github.com/cindyweiss  
+Robert Nielsen    https://github.com/robertjnielsen
 
 
 ### Feature 1: Location Query
@@ -56,8 +60,18 @@ Actual time needed to complete: 90mins
 
 Estimate of time needed to complete: 45mins  
 
-Start time: 12:56PM  
+Start time: 9:45PM  
 
-Finish time: 2:00PM  
+Finish time: 10:15PM  
 
-Actual time needed to complete: 90mins  
+Actual time needed to complete: 30mins  
+
+### Feature 4: Locations
+
+Estimate of time needed to complete: 60mins  
+
+Start time: 10:21PM  
+
+Finish time: 10:15PM  
+
+Actual time needed to complete: 30mins 
