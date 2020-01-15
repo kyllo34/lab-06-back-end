@@ -1,6 +1,6 @@
-# lab-6
+# lab-6  
 
-**Author**: Andrew Kyllo
+**Author**: Andrew Kyllo  
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
@@ -18,26 +18,36 @@ A stand-alone back end app which will interact with a static front end.
 01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource.
 
 ## Credits and Collaborations
-Cait Rowland https://github.com/caitleigh
-Cidy Weiss https://github.com/cindyweiss
+Cait Rowland https://github.com/caitleigh  
+Cidy Weiss https://github.com/cindyweiss  
 
 
-Feature 1: Location Query
+### Feature 1: Location Query
 
-Estimate of time needed to complete: 120mins
+Estimate of time needed to complete: 120mins  
 
-Start time: 12:00PM
+Start time: 12:00PM    
 
-Finish time: 13:00PM
+Finish time: 13:00PM  
 
-Actual time needed to complete: 60mins
+Actual time needed to complete: 60mins  
 
-Feature 2: Weather Query
+### Feature 2: Weather Query
 
-Estimate of time needed to complete: 60mins
+Estimate of time needed to complete: 60mins  
 
-Start time: 12:56PM
+Start time: 12:56PM    
 
-Finish time: 2:00PM
+Finish time: 2:00PM  
 
-Actual time needed to complete: 60mins
+Actual time needed to complete: 90mins  
+
+### Feature 3: Errors
+
+Estimate of time needed to complete: 60mins  
+
+Start time: 12:56PM  
+
+Finish time: 2:00PM  
+
+Actual time needed to complete: 90mins  
