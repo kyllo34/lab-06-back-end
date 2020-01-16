@@ -21,6 +21,8 @@ superagent: v5.2.1
 **1/15/2020 11:41** Refactored location handler function to utilize API queries 
 **1/15/2020 13:51** Refactored weather handler function to utilize API queries 
 **1/16/2020 9:01**  Created function to handle eventful API queries
+**1/16/2020 9:01**  Created database to store and retrieve queried data
+
 
 
 ## Credits and Collaborations
