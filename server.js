@@ -6,39 +6,57 @@ require('dotenv').config();
 const express = require('express');
 const superagent = require('superagent');
 const cors = require('cors');
+const pg = require('pg');
 
 // app setup
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(cors());
-let locations = {};
-let forecasts = {};
+
+// Database Connection Setup
+const client = new pg.Client(process.env.DATABASE_URL);
+client.on('error', err => {throw err;});
 
 // Route Definitions
 app.get('/location', locationHandler);
-app.get('/weather', weatherHandler);
+// app.get('/weather', weatherHandler);
 app.use('*', (request, response ) => response.status(404).send('Page not found!'));
 app.use(errorHandler);
 
 // Route Handlers
 function locationHandler(request, response) {
   let city = request.query.city;
-  let key = process.env.LOCATION_IQ_API_KEY;
-  const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
+  let sql = 'SELECT * FROM locations WHERE search_query = $1;'
+  let values = [city];
+  return client.query(sql, values)
+    .then(data => {
+      if (data.rowCount) {
 
-  if (locations[url]) {
-    response.send(locations[url])
-  } else {
-    superagent.get(url)
-      .then(data => {
-        let geoDataResults = data.body[0];
-        let location = new Location(city, geoDataResults);
-        response.status(200).send(location);
-      })
-      .catch(() => {
-        errorHandler('Something went wrong', response);
-      });
-  }
+
+      } else {
+        let key = process.env.LOCATION_IQ_API_KEY;
+        const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
+        superagent.get(url)
+          .then(results => {
+            let location = new Location(city, results.body[0]);
+            let sql2 = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4)';
+            let safeValues = [city, location.formatted_query, location.latitude, location.longitude];
+
+            client.query(sql2, safeValues)
+              // .then(results => {
+              //   console.log(results.rows[0]);
+
+              //   response.status(200).send(location);
+              // })
+              // .catch(() => {
+              //   errorHandler('Something went wrong caching', response);
+              // });
+          })
+          .catch(() => {
+            errorHandler('Something went wrong', response);
+          });
+      }
+    });
 }
 
 function weatherHandler(request, response) {
@@ -55,15 +73,12 @@ function weatherHandler(request, response) {
       })
       .catch(() => errorHandler('Something went wrong', response))
   }
-
-
-  // try {
-  //   response.status(200).send(geoWeather.daily.data.map(day => new DailySummary(day)));
-  // }
-  // catch (error) {
-  //   errorHandler('Something went wrong', response);
-  // }
 }
+
+// function eventfulHandler(request, response) {
+//   let key = process.env.EVENTFUL_API_KEY;
+
+// }
 
 // Constructors
 function Location(city, locationData) {
@@ -87,3 +102,14 @@ function errorHandler(string, response) {
 app.listen(PORT, () => {
   console.log(`listen on ${PORT}`)
 });
+
+// Connect to DB and Start the Web Server
+client.connect()
+  .then( () => {
+    app.listen(PORT, () => {
+      console.log('Server up on', PORT);
+    });
+  })
+  .catch(err => {
+    throw `PG Startup Error: ${err.message}`;
+  })
