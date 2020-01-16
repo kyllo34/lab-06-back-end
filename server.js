@@ -6,6 +6,7 @@ require('dotenv').config();
 const express = require('express');
 const superagent = require('superagent');
 const cors = require('cors');
+const pg = require('pg');
 
 // app setup
 const PORT = process.env.PORT || 3001;
@@ -13,6 +14,10 @@ const app = express();
 app.use(cors());
 let locations = {};
 let forecasts = {};
+
+// Database Connection Setup
+const client = new pg.Client(process.env.DATABASE_URL);
+client.on('error', err => {throw err;});
 
 // Route Definitions
 app.get('/location', locationHandler);
@@ -55,15 +60,12 @@ function weatherHandler(request, response) {
       })
       .catch(() => errorHandler('Something went wrong', response))
   }
-
-
-  // try {
-  //   response.status(200).send(geoWeather.daily.data.map(day => new DailySummary(day)));
-  // }
-  // catch (error) {
-  //   errorHandler('Something went wrong', response);
-  // }
 }
+
+// function eventfulHandler(request, response) {
+//   let key = process.env.EVENTFUL_API_KEY;
+
+// }
 
 // Constructors
 function Location(city, locationData) {
@@ -87,3 +89,14 @@ function errorHandler(string, response) {
 app.listen(PORT, () => {
   console.log(`listen on ${PORT}`)
 });
+
+// Connect to DB and Start the Web Server
+client.connect()
+  .then( () => {
+    app.listen(PORT, () => {
+      console.log('Server up on', PORT);
+    });
+  })
+  .catch(err => {
+    throw `PG Startup Error: ${err.message}`;
+  })
