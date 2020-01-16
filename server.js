@@ -19,7 +19,7 @@ client.on('error', err => {throw err;});
 
 // Route Definitions
 app.get('/location', locationHandler);
-// app.get('/weather', weatherHandler);
+app.get('/weather', weatherHandler);
 app.use('*', (request, response ) => response.status(404).send('Page not found!'));
 app.use(errorHandler);
 
@@ -28,11 +28,10 @@ function locationHandler(request, response) {
   let city = request.query.city;
   let sql = 'SELECT * FROM locations WHERE search_query = $1;'
   let values = [city];
-  return client.query(sql, values)
+  client.query(sql, values)
     .then(data => {
       if (data.rowCount) {
-
-
+        response.send(data.rows[0]);
       } else {
         let key = process.env.LOCATION_IQ_API_KEY;
         const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
@@ -41,16 +40,8 @@ function locationHandler(request, response) {
             let location = new Location(city, results.body[0]);
             let sql2 = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4)';
             let safeValues = [city, location.formatted_query, location.latitude, location.longitude];
-
             client.query(sql2, safeValues)
-              // .then(results => {
-              //   console.log(results.rows[0]);
-
-              //   response.status(200).send(location);
-              // })
-              // .catch(() => {
-              //   errorHandler('Something went wrong caching', response);
-              // });
+            response.status(200).send(location);
           })
           .catch(() => {
             errorHandler('Something went wrong', response);

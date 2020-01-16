@@ -1,7 +1,7 @@
 # lab-6  
 
 **Author**: Andrew Kyllo  
-**Version**: 1.1.3
+**Version**: 1.2.1
 
 ## Overview
 A stand-alone back end app which will interact with a static front end.
@@ -22,6 +22,7 @@ superagent: v5.2.1
 **1/15/2020 13:51** Refactored weather handler function to utilize API queries 
 **1/16/2020 9:01**  Created function to handle eventful API queries
 **1/16/2020 9:01**  Created database to store and retrieve queried data
+**1/16/2020 14:15** Server sends data from database 
 
 
 
@@ -96,7 +97,7 @@ Actual time needed to complete: 19xmins
 
 Estimate of time needed to complete: 60mins  
 
-Start time: 9:03PM  
+Start time: 9:03AM  
 
 Finish time: 1:50PM  
 
@@ -106,8 +107,8 @@ Actual time needed to complete: 19xmins
 
 Estimate of time needed to complete: 60mins  
 
-Start time: 9:17PM  
+Start time: 12:15PM  
 
-Finish time: 10:40PM  
+Finish time: 2:15PM  
 
-Actual time needed to complete: 73mins 
+Actual time needed to complete: 120mins 
