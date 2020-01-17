@@ -1,7 +1,7 @@
 # lab-6  
 
 **Author**: Andrew Kyllo  
-**Version**: 1.2.3
+**Version**: 1.2.4
 
 ## Overview
 A stand-alone back end app which will interact with a static front end.
@@ -24,8 +24,9 @@ superagent: v5.2.1
 **1/16/2020 9:01**  Created database to store and retrieve queried data
 **1/16/2020 14:15** Server sends data from database 
 **1/16/2020 15:31** Front end now displays even data received from API
-**1/17/2020 8:23AM** Linked Heroku to database
-**1/17/2020 10:57AM** Server now retrieves movie data from api and sends it to front end
+**1/17/2020 8:23** Linked Heroku to database
+**1/17/2020 10:57** Server now retrieves movie data from api and sends it to front end
+**1/17/2020 14:47** Server now retrieves business data from api and sends it to front end
 
 
 ## Credits and Collaborations
@@ -140,8 +141,8 @@ Actual time needed to complete: 135mins
 
 Estimate of time needed to complete: 45mins  
 
-Start time: 11:21PM  
+Start time: 11:21AM  
 
-Finish time: 10:56PM  
+Finish time: 2:46PM  
 
-Actual time needed to complete: 135mins 
+Actual time needed to complete: 120mins 

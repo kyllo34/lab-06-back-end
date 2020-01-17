@@ -104,18 +104,15 @@ function yelpHandler(request, response) {
   superagent
     .get(yelpDataUrl)
     .set('Authorization', `Bearer ${key}`)
-    // .then(movieData => {
-    //   let movieList = movieData.body.results;
-    //   let movie = movieList.map(thisMovieData => {
-    //     return new Movie(thisMovieData);
-    //   })
-    //   response.status(200).send(movie);
-    // })
-    // .catch(err => console.error('Something went wrong', err));
+    .then(yelpData => {
+      let businessList = JSON.parse(yelpData.text).businesses;
+      let business = businessList.map(thisBusinessData => {
+        return new Business(thisBusinessData);
+      })
+      response.status(200).send(business);
+    })
+    .catch(err => console.error('Something went wrong', err));
 }
-
-
-
 
 // Constructors
 function Location(city, locationData) {
@@ -144,6 +141,12 @@ function Movie(thisMovieData) {
   this.released_on = thisMovieData.release_date
 }
 
+function Business(thisBusinessData) {
+  this.name = thisBusinessData.name;
+  this.image_url = thisBusinessData.image_url;
+  this.price = thisBusinessData.price;
+  this.url = thisBusinessData.url;
+}
 
 // Error Handlers
 function errorHandler(string, response) {
