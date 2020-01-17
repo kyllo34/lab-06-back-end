@@ -85,7 +85,7 @@ function eventfulHandler(request, response) {
 
 function moviesHandler(request, response) {
   let key = process.env.IMDB_API_KEY;
-  
+
 }
 
 // Constructors
@@ -113,9 +113,9 @@ function errorHandler(string, response) {
 
 
 // make sure app is listen
-app.listen(PORT, () => {
-  console.log(`listen on ${PORT}`)
-});
+// app.listen(PORT, () => {
+//   console.log(`listen on ${PORT}`)
+// });
 
 // Connect to DB and Start the Web Server
 client.connect()
