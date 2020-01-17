@@ -19,7 +19,7 @@ client.on('error', err => {throw err;});
 
 // Route Definitions
 app.get('/location', locationHandler);
-// app.get('/weather', weatherHandler);
+app.get('/weather', weatherHandler);
 app.get('/events', eventfulHandler);
 app.use('*', (request, response ) => response.status(404).send('Page not found!'));
 app.use(errorHandler);
@@ -50,22 +50,22 @@ function locationHandler(request, response) {
       }
     });
 }
-
-// function weatherHandler(request, response) {
-//   let key = process.env.DARKSKY_API_KEY;
-//   let latitude = request.query.latitude;
-//   let longitude = request.query.longitude;
-//   const url = `https://api.darksky.net/forecast/${key}/${latitude},${longitude}`
-//   if (forecasts[url]) {
-//     response.send(forecasts[url])
-//   } else {
-//     superagent.get(url)
-//       .then(dataSet => {
-//         response.status(200).send(dataSet.body.daily.data.map(day => new DailySummary(day)));
-//       })
-//       .catch(() => errorHandler('Something went wrong', response))
-//   }
-// }
+const forecasts = {};
+function weatherHandler(request, response) {
+  let key = process.env.DARKSKY_API_KEY;
+  let latitude = request.query.latitude;
+  let longitude = request.query.longitude;
+  const url = `https://api.darksky.net/forecast/${key}/${latitude},${longitude}`
+  if (forecasts[url]) {
+    response.send(forecasts[url])
+  } else {
+    superagent.get(url)
+      .then(dataSet => {
+        response.status(200).send(dataSet.body.daily.data.map(day => new DailySummary(day)));
+      })
+      .catch(() => errorHandler('Something went wrong', response))
+  }
+}
 
 function eventfulHandler(request, response) {
   let key = process.env.EVENTFUL_API_KEY;
@@ -79,7 +79,7 @@ function eventfulHandler(request, response) {
       })
       response.status(200).send(localEvent);
     })
-    .catch(err => console.err('Something went wrong', err));
+    .catch(err => console.error('Something went wrong', err));
 }
 
 // Constructors
