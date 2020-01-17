@@ -24,6 +24,7 @@ superagent: v5.2.1
 **1/16/2020 9:01**  Created database to store and retrieve queried data
 **1/16/2020 14:15** Server sends data from database 
 **1/16/2020 15:31** Front end now displays even data received from API
+**1/17/2020 8:23AM** Linked Heroku to database
 
 
 
@@ -113,3 +114,23 @@ Start time: 12:15PM
 Finish time: 2:15PM  
 
 Actual time needed to complete: 120mins 
+
+### Feature 8: Heroku Deployment
+
+Estimate of time needed to complete: 45mins  
+
+Start time: 7:54AM  
+
+Finish time: 8:16PM  
+
+Actual time needed to complete: 22mins 
+
+### Feature 9: Movies
+
+Estimate of time needed to complete: 45mins  
+
+Start time: 8:41AM  
+
+Finish time: 8:16PM  
+
+Actual time needed to complete: 22mins 

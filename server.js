@@ -21,6 +21,7 @@ client.on('error', err => {throw err;});
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
 app.get('/events', eventfulHandler);
+app.get('/movies', moviesHandler);
 app.use('*', (request, response ) => response.status(404).send('Page not found!'));
 app.use(errorHandler);
 
@@ -80,6 +81,11 @@ function eventfulHandler(request, response) {
       response.status(200).send(localEvent);
     })
     .catch(err => console.error('Something went wrong', err));
+}
+
+function moviesHandler(request, response) {
+  let key = process.env.IMDB_API_KEY;
+  
 }
 
 // Constructors
