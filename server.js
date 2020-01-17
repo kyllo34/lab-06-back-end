@@ -22,6 +22,7 @@ app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
 app.get('/events', eventfulHandler);
 app.get('/movies', moviesHandler);
+app.get('/yelp', yelpHandler);
 app.use('*', (request, response ) => response.status(404).send('Page not found!'));
 app.use(errorHandler);
 
@@ -51,7 +52,6 @@ function locationHandler(request, response) {
       }
     });
 }
-const forecasts = {};
 function weatherHandler(request, response) {
   let key = process.env.DARKSKY_API_KEY;
   let latitude = request.query.latitude;
@@ -97,6 +97,24 @@ function moviesHandler(request, response) {
     })
     .catch(err => console.error('Something went wrong', err));
 }
+function yelpHandler(request, response) {
+  let key = process.env.YELP_API_KEY;
+  let {latitude, longitude} = request.query;
+  let yelpDataUrl = `https://api.yelp.com/v3/businesses/search?term=delis&latitude=${latitude}&longitude=${longitude}`;
+  superagent
+    .get(yelpDataUrl)
+    .set('Authorization', `Bearer ${key}`)
+    // .then(movieData => {
+    //   let movieList = movieData.body.results;
+    //   let movie = movieList.map(thisMovieData => {
+    //     return new Movie(thisMovieData);
+    //   })
+    //   response.status(200).send(movie);
+    // })
+    // .catch(err => console.error('Something went wrong', err));
+}
+
+
 
 
 // Constructors

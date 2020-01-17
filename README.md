@@ -1,7 +1,7 @@
 # lab-6  
 
 **Author**: Andrew Kyllo  
-**Version**: 1.2.2
+**Version**: 1.2.3
 
 ## Overview
 A stand-alone back end app which will interact with a static front end.
@@ -25,7 +25,7 @@ superagent: v5.2.1
 **1/16/2020 14:15** Server sends data from database 
 **1/16/2020 15:31** Front end now displays even data received from API
 **1/17/2020 8:23AM** Linked Heroku to database
-
+**1/17/2020 10:57AM** Server now retrieves movie data from api and sends it to front end
 
 
 ## Credits and Collaborations
@@ -33,6 +33,7 @@ Cait Rowland      https://github.com/caitleigh
 Cidy Weiss        https://github.com/cindyweiss  
 Robert Nielsen    https://github.com/robertjnielsen
 Matthew Johnson   https://github.com/SEAsouthern/lab-06-back-end
+Jin Kim           https://github.com/jinwoov/lab-06-back-end
 
 
 ### Feature 1: Location Query
@@ -131,6 +132,16 @@ Estimate of time needed to complete: 45mins
 
 Start time: 8:41AM  
 
-Finish time: 8:16PM  
+Finish time: 10:56PM  
 
-Actual time needed to complete: 22mins 
+Actual time needed to complete: 135mins 
+
+### Feature 10: Yelp
+
+Estimate of time needed to complete: 45mins  
+
+Start time: 11:21PM  
+
+Finish time: 10:56PM  
+
+Actual time needed to complete: 135mins 
