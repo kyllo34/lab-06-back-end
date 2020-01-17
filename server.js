@@ -84,9 +84,20 @@ function eventfulHandler(request, response) {
 }
 
 function moviesHandler(request, response) {
-  let key = process.env.IMDB_API_KEY;
-
+  let key = process.env.TMDB_API_KEY;
+  let {search_query} = request.query;
+  let movieDataUrl = `https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-US&query=${search_query}`;
+  superagent.get(movieDataUrl)
+    .then(movieData => {
+      let movieList = movieData.body.results;
+      let movie = movieList.map(thisMovieData => {
+        return new Movie(thisMovieData);
+      })
+      response.status(200).send(movie);
+    })
+    .catch(err => console.error('Something went wrong', err));
 }
+
 
 // Constructors
 function Location(city, locationData) {
@@ -105,17 +116,22 @@ function Event(thisEventData) {
   this.link = thisEventData.url;
   this.summary = thisEventData.description;
 }
+function Movie(thisMovieData) {
+  this.title = thisMovieData.title;
+  this.overview = thisMovieData.overview;
+  this.average_votes = thisMovieData.vote_average;
+  this.total_votes = thisMovieData.vote_count;
+  this.image_url = `https://image.tmdb.org/t/p/w500${thisMovieData.backdrop_path}`;
+  this.popularity = thisMovieData.popularity;
+  this.released_on = thisMovieData.release_date
+}
+
 
 // Error Handlers
 function errorHandler(string, response) {
   response.status(500).send(string);
 }
 
-
-// make sure app is listen
-// app.listen(PORT, () => {
-//   console.log(`listen on ${PORT}`)
-// });
 
 // Connect to DB and Start the Web Server
 client.connect()
