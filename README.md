@@ -1,7 +1,7 @@
 # lab-6  
 
 **Author**: Andrew Kyllo  
-**Version**: 1.2.1
+**Version**: 1.2.2
 
 ## Overview
 A stand-alone back end app which will interact with a static front end.
@@ -23,6 +23,7 @@ superagent: v5.2.1
 **1/16/2020 9:01**  Created function to handle eventful API queries
 **1/16/2020 9:01**  Created database to store and retrieve queried data
 **1/16/2020 14:15** Server sends data from database 
+**1/16/2020 15:31** Front end now displays even data received from API
 
 
 
@@ -101,7 +102,7 @@ Start time: 9:03AM
 
 Finish time: 1:50PM  
 
-Actual time needed to complete: 19xmins 
+Actual time needed to complete: 400mins 
 
 ### Feature 7: Databse
 

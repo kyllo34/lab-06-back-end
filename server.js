@@ -20,6 +20,7 @@ client.on('error', err => {throw err;});
 // Route Definitions
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
+app.get('/events', eventfulHandler);
 app.use('*', (request, response ) => response.status(404).send('Page not found!'));
 app.use(errorHandler);
 
@@ -49,7 +50,7 @@ function locationHandler(request, response) {
       }
     });
 }
-
+const forecasts = {};
 function weatherHandler(request, response) {
   let key = process.env.DARKSKY_API_KEY;
   let latitude = request.query.latitude;
@@ -66,10 +67,20 @@ function weatherHandler(request, response) {
   }
 }
 
-// function eventfulHandler(request, response) {
-//   let key = process.env.EVENTFUL_API_KEY;
-
-// }
+function eventfulHandler(request, response) {
+  let key = process.env.EVENTFUL_API_KEY;
+  let {search_query} = request.query;
+  const eventDataUrl = `http://api.eventful.com/json/events/search?keywords=music&location=${search_query}&app_key=${key}`;
+  superagent.get(eventDataUrl)
+    .then(eventData => {
+      let eventMassData = JSON.parse(eventData.text);
+      let localEvent = eventMassData.events.event.map(thisEventData => {
+        return new Event(thisEventData);
+      })
+      response.status(200).send(localEvent);
+    })
+    .catch(err => console.error('Something went wrong', err));
+}
 
 // Constructors
 function Location(city, locationData) {
@@ -81,6 +92,12 @@ function Location(city, locationData) {
 function DailySummary(day) {
   this.forecast = day.summary;
   this.time = new Date(day.time * 1000).toString().slice(0,15);
+}
+function Event(thisEventData) {
+  this.name = thisEventData.title;
+  this.event_date = thisEventData.start_time.slice(0, 10);
+  this.link = thisEventData.url;
+  this.summary = thisEventData.description;
 }
 
 // Error Handlers
