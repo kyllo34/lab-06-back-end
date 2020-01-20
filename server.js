@@ -29,7 +29,7 @@ app.use(errorHandler);
 // Route Handlers
 function locationHandler(request, response) {
   let city = request.query.city;
-  let sql = 'SELECT * FROM locations WHERE search_query = $1;'
+  let sql = 'SELECT * FROM locations WHERE search_query = $1;';
   let values = [city];
   client.query(sql, values)
     .then(data => {
@@ -43,7 +43,7 @@ function locationHandler(request, response) {
             let location = new Location(city, results.body[0]);
             let sql2 = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4)';
             let safeValues = [city, location.formatted_query, location.latitude, location.longitude];
-            client.query(sql2, safeValues)
+            client.query(sql2, safeValues);
             response.status(200).send(location);
           })
           .catch(() => {
@@ -53,19 +53,30 @@ function locationHandler(request, response) {
     });
 }
 function weatherHandler(request, response) {
-  let key = process.env.DARKSKY_API_KEY;
   let latitude = request.query.latitude;
   let longitude = request.query.longitude;
-  const url = `https://api.darksky.net/forecast/${key}/${latitude},${longitude}`
-  if (forecasts[url]) {
-    response.send(forecasts[url])
-  } else {
-    superagent.get(url)
-      .then(dataSet => {
-        response.status(200).send(dataSet.body.daily.data.map(day => new DailySummary(day)));
-      })
-      .catch(() => errorHandler('Something went wrong', response))
-  }
+  let sql = `SELECT * FROM forecasts WHERE latitude=$1 AND longitude=$2;`;
+  let values = [latitude, longitude];
+  client.query(sql, values)
+    .then(data => {
+      if (data.rowCount) {
+        response.status(200).json(data.rows[0].forecast);
+      } else {
+        let key = process.env.DARKSKY_API_KEY;
+        const url = `https://api.darksky.net/forecast/${key}/${latitude},${longitude}`
+        superagent.get(url)
+          .then(dataSet => {
+            let forecastData = dataSet.body.daily.data;
+            let localForecast = forecastData.map(day => new DailySummary(day));
+            let forecastjson = JSON.stringify(localForecast);
+            let sql2 = `INSERT INTO forecasts (latitude, longitude, forecast) VALUES ($1, $2, $3);`;
+            let values2 = [latitude, longitude, forecastjson];
+            client.query(sql2, values2);
+            response.status(200).send(localForecast);
+          })
+          .catch(() => errorHandler('Something went wrong', response));
+      }
+    })
 }
 
 function eventfulHandler(request, response) {
@@ -138,7 +149,7 @@ function Movie(thisMovieData) {
   this.total_votes = thisMovieData.vote_count;
   this.image_url = `https://image.tmdb.org/t/p/w500${thisMovieData.backdrop_path}`;
   this.popularity = thisMovieData.popularity;
-  this.released_on = thisMovieData.release_date
+  this.released_on = thisMovieData.release_date;
 }
 
 function Business(thisBusinessData) {
