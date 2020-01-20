@@ -146,3 +146,13 @@ Start time: 11:21AM
 Finish time: 2:46PM  
 
 Actual time needed to complete: 120mins 
+
+### Feature 11: Server database
+
+Estimate of time needed to complete: 45mins  
+
+Start time: 11:21AM  
+
+Finish time: 2:46PM  
+
+Actual time needed to complete: 120mins 
