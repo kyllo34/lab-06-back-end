@@ -26,32 +26,41 @@ app.get('/yelp', yelpHandler);
 app.use('*', (request, response ) => response.status(404).send('Page not found!'));
 app.use(errorHandler);
 
+
 // Route Handlers
 function locationHandler(request, response) {
   let city = request.query.city;
+  getLocationData(city)
+    .then(data => render(data, response))
+    .catch((error) => errorHandler(error, request, response));
+}
+
+function getLocationData(city, response) {
   let sql = 'SELECT * FROM locations WHERE search_query = $1;';
   let values = [city];
-  client.query(sql, values)
+  return client.query(sql, values)
     .then(data => {
-      if (data.rowCount) {
-        response.send(data.rows[0]);
-      } else {
+      if (data.rowCount) {response.status(200).send(data.rows[0]) }
+      else {
+        console.log('hello');
+
         let key = process.env.LOCATION_IQ_API_KEY;
         const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
-        superagent.get(url)
+        return superagent.get(url)
           .then(results => {
-            let location = new Location(city, results.body[0]);
-            let sql2 = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4)';
-            let safeValues = [city, location.formatted_query, location.latitude, location.longitude];
-            client.query(sql2, safeValues);
-            response.status(200).send(location);
-          })
-          .catch(() => {
-            errorHandler('Something went wrong', response);
-          });
+            cacheLocation(city, results.body)});
       }
     });
 }
+function cacheLocation(city, data) {
+  let location = new Location(city, data[0]);
+  let sql = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4)';
+  let safeValues = [city, location.formatted_query, location.latitude, location.longitude];
+  return client.query(sql, safeValues)
+    .then(results => results.rows[0]);
+}
+
+
 function weatherHandler(request, response) {
   let latitude = request.query.latitude;
   let longitude = request.query.longitude;
@@ -125,12 +134,16 @@ function yelpHandler(request, response) {
     .catch(err => console.error('Something went wrong', err));
 }
 
+function render(data, response) {
+  response.status(200).json(data);
+}
+
 // Constructors
 function Location(city, locationData) {
   this.search_query = city;
   this.formatted_query = locationData.display_name;
   this.latitude = locationData.lat;
-  this.longitude = locationData.lon
+  this.longitude = locationData.lon;
 }
 function DailySummary(day) {
   this.forecast = day.summary;
@@ -160,8 +173,8 @@ function Business(thisBusinessData) {
 }
 
 // Error Handlers
-function errorHandler(string, response) {
-  response.status(500).send(string);
+function errorHandler(error, request, response) {
+  response.status(500).send(error);
 }
 
 

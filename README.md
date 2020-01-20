@@ -27,6 +27,8 @@ superagent: v5.2.1
 **1/17/2020 8:23** Linked Heroku to database
 **1/17/2020 10:57** Server now retrieves movie data from api and sends it to front end
 **1/17/2020 14:47** Server now retrieves business data from api and sends it to front end
+**1/19/2020 15:30** Can now stash and retrieve data from local database
+
 
 
 ## Credits and Collaborations
@@ -151,8 +153,18 @@ Actual time needed to complete: 120mins
 
 Estimate of time needed to complete: 45mins  
 
-Start time: 11:21AM  
+Start time: 2:46AM  
 
-Finish time: 2:46PM  
+Finish time: 4:50PM  
 
-Actual time needed to complete: 120mins 
+Actual time needed to complete: 124mins 
+
+### Feature 12: Server database
+
+Estimate of time needed to complete: 90mins  
+
+Start time: 7:43AM  
+
+Finish time: 4:50PM  
+
+Actual time needed to complete: 124mins 
