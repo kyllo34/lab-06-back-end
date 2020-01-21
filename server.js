@@ -49,39 +49,48 @@ function getLocationData(city) {
       }
     });
 }
+
 function cacheLocation(city, location) {
   let sql = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4)';
   let safeValues = [city, location.formatted_query, location.latitude, location.longitude];
   return client.query(sql, safeValues)
 }
 
-
 function weatherHandler(request, response) {
   let latitude = request.query.latitude;
   let longitude = request.query.longitude;
+  getWeatherData(latitude, longitude)
+    .then(data => render(data, response))
+    .catch((error) => errorHandler(error, request, response));
+}
+
+function getWeatherData(latitude, longitude) {
   let sql = `SELECT * FROM forecasts WHERE latitude=$1 AND longitude=$2;`;
   let values = [latitude, longitude];
-  client.query(sql, values)
+  return client.query(sql, values)
     .then(data => {
-      if (data.rowCount) {
-        response.status(200).json(data.rows[0].forecast);
+      if (data.rowCount) { return data.rows[0].forecast;
       } else {
         let key = process.env.DARKSKY_API_KEY;
         const url = `https://api.darksky.net/forecast/${key}/${latitude},${longitude}`
-        superagent.get(url)
+        return superagent.get(url)
           .then(dataSet => {
             let forecastData = dataSet.body.daily.data;
             let localForecast = forecastData.map(day => new DailySummary(day));
             let forecastjson = JSON.stringify(localForecast);
-            let sql2 = `INSERT INTO forecasts (latitude, longitude, forecast) VALUES ($1, $2, $3);`;
-            let values2 = [latitude, longitude, forecastjson];
-            client.query(sql2, values2);
-            response.status(200).send(localForecast);
+            cacheWeather(latitude, longitude, forecastjson);
+            return localForecast;
           })
-          .catch(() => errorHandler('Something went wrong', response));
       }
     })
 }
+
+function cacheWeather(latitude, longitude, forecastjson) {
+  let sql2 = `INSERT INTO forecasts (latitude, longitude, forecast) VALUES ($1, $2, $3);`;
+  let values2 = [latitude, longitude, forecastjson];
+  return client.query(sql2, values2);
+}
+
 
 function eventfulHandler(request, response) {
   let key = process.env.EVENTFUL_API_KEY;
@@ -164,8 +173,6 @@ function Business(thisBusinessData) {
 }
 // Sends data back to front end
 function render(data, response) {
-  console.log(data)
-
   response.status(200).json(data);
 }
 
