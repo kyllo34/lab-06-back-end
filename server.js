@@ -13,10 +13,6 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(cors());
 
-// Database Connection Setup
-const client = new pg.Client(process.env.DATABASE_URL);
-client.on('error', err => {throw err;});
-
 // Route Definitions
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
@@ -35,29 +31,28 @@ function locationHandler(request, response) {
     .catch((error) => errorHandler(error, request, response));
 }
 
-function getLocationData(city, response) {
+function getLocationData(city) {
   let sql = 'SELECT * FROM locations WHERE search_query = $1;';
   let values = [city];
   return client.query(sql, values)
     .then(data => {
-      if (data.rowCount) {response.status(200).send(data.rows[0]) }
+      if (data.rowCount) {return data.rows[0] }
       else {
-        console.log('hello');
-
         let key = process.env.LOCATION_IQ_API_KEY;
         const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
         return superagent.get(url)
           .then(results => {
-            cacheLocation(city, results.body)});
+            let location = new Location(city, results.body[0]);
+            cacheLocation(city, location)
+            return location;
+          });
       }
     });
 }
-function cacheLocation(city, data) {
-  let location = new Location(city, data[0]);
+function cacheLocation(city, location) {
   let sql = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4)';
   let safeValues = [city, location.formatted_query, location.latitude, location.longitude];
   return client.query(sql, safeValues)
-    .then(results => results.rows[0]);
 }
 
 
@@ -134,10 +129,6 @@ function yelpHandler(request, response) {
     .catch(err => console.error('Something went wrong', err));
 }
 
-function render(data, response) {
-  response.status(200).json(data);
-}
-
 // Constructors
 function Location(city, locationData) {
   this.search_query = city;
@@ -171,14 +162,22 @@ function Business(thisBusinessData) {
   this.price = thisBusinessData.price;
   this.url = thisBusinessData.url;
 }
+// Sends data back to front end
+function render(data, response) {
+  console.log(data)
+
+  response.status(200).json(data);
+}
 
 // Error Handlers
-function errorHandler(error, request, response) {
+function errorHandler(error, response) {
   response.status(500).send(error);
 }
 
 
-// Connect to DB and Start the Web Server
+// Start Up the Server after the database is connected and cache is loaded
+const client = new pg.Client(process.env.DATABASE_URL);
+client.on('error', err => {throw err;});
 client.connect()
   .then( () => {
     app.listen(PORT, () => {

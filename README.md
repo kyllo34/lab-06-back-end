@@ -27,7 +27,7 @@ superagent: v5.2.1
 **1/17/2020 8:23** Linked Heroku to database
 **1/17/2020 10:57** Server now retrieves movie data from api and sends it to front end
 **1/17/2020 14:47** Server now retrieves business data from api and sends it to front end
-**1/19/2020 15:30** Can now stash and retrieve data from local database
+**1/19/2020 15:30** Can now stash and retrieve data from local database for weather forecasts
 
 
 
