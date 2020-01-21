@@ -112,34 +112,43 @@ function getEventData({search_query}) {
 }
 
 function moviesHandler(request, response) {
-  let key = process.env.TMDB_API_KEY;
   let {search_query} = request.query;
+  getMovieData({search_query})
+    .then(data => render(data, response))
+    .catch((error) => errorHandler(error, request, response));
+}
+
+function getMovieData({search_query}) {
+  let key = process.env.TMDB_API_KEY;
   let movieDataUrl = `https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-US&query=${search_query}`;
-  superagent.get(movieDataUrl)
+  return superagent.get(movieDataUrl)
     .then(movieData => {
       let movieList = movieData.body.results;
       let movie = movieList.map(thisMovieData => {
         return new Movie(thisMovieData);
       })
-      response.status(200).send(movie);
+      return movie;
     })
-    .catch(err => console.error('Something went wrong', err));
 }
 function yelpHandler(request, response) {
-  let key = process.env.YELP_API_KEY;
   let {latitude, longitude} = request.query;
+  getYelpData({latitude, longitude})
+    .then(data => render(data, response))
+    .catch((error) => errorHandler(error, request, response));
+}
+
+function getYelpData({latitude, longitude}) {
+  let key = process.env.YELP_API_KEY;
   let yelpDataUrl = `https://api.yelp.com/v3/businesses/search?term=delis&latitude=${latitude}&longitude=${longitude}`;
-  superagent
-    .get(yelpDataUrl)
+  return superagent.get(yelpDataUrl)
     .set('Authorization', `Bearer ${key}`)
     .then(yelpData => {
       let businessList = JSON.parse(yelpData.text).businesses;
       let business = businessList.map(thisBusinessData => {
         return new Business(thisBusinessData);
       })
-      response.status(200).send(business);
+      return business;
     })
-    .catch(err => console.error('Something went wrong', err));
 }
 
 // Constructors
