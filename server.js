@@ -93,18 +93,22 @@ function cacheWeather(latitude, longitude, forecastjson) {
 
 
 function eventfulHandler(request, response) {
-  let key = process.env.EVENTFUL_API_KEY;
   let {search_query} = request.query;
+  getEventData({search_query})
+    .then(data => render(data, response))
+    .catch((error) => errorHandler(error, request, response));
+}
+function getEventData({search_query}) {
+  let key = process.env.EVENTFUL_API_KEY;
   const eventDataUrl = `http://api.eventful.com/json/events/search?keywords=music&location=${search_query}&app_key=${key}`;
-  superagent.get(eventDataUrl)
+  return superagent.get(eventDataUrl)
     .then(eventData => {
       let eventMassData = JSON.parse(eventData.text);
       let localEvent = eventMassData.events.event.map(thisEventData => {
         return new Event(thisEventData);
       })
-      response.status(200).send(localEvent);
+      return localEvent;
     })
-    .catch(err => console.error('Something went wrong', err));
 }
 
 function moviesHandler(request, response) {
